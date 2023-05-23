@@ -31,6 +31,9 @@ var runCMD = &cobra.Command{
 }
 
 func runCmdE(cmd *cobra.Command, args []string) error {
-	ls := services.NewLogService()
+	ls, err := services.NewLogService()
+	if err != nil {
+		return err
+	}
 	return ls.Run()
 }

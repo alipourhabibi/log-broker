@@ -11,10 +11,17 @@ var logLevels = []string{"INFO", "DEBUG", "WARNING", "ERROR"}
 var logSources = []string{"App", "System", "Network", "Security"}
 
 type logService struct {
+	socket *socket
 }
 
-func NewLogService() *logService {
-	return &logService{}
+func NewLogService() (*logService, error) {
+	socket, err := NewSocket()
+	if err != nil {
+		return nil, err
+	}
+	return &logService{
+		socket: socket,
+	}, nil
 }
 
 func (l *logService) Run() error {
@@ -34,7 +41,7 @@ func (l *logService) Run() error {
 				wg.Done()
 				return
 			case <-ticker.C:
-				for i := 10000; i <= 10000+rand.Intn(5000); i++ {
+				for i := 1; i <= 10000+rand.Intn(5000); i++ {
 					messages <- l.generateRandomLogMessage()
 				}
 			}
@@ -43,10 +50,8 @@ func (l *logService) Run() error {
 
 	// Send Messages
 	go func() {
-		for _ = range messages {
-			// TODO Send m
-			// go Send(m)
-			return
+		for m := range messages {
+			go l.socket.Send(m)
 		}
 	}()
 
