@@ -4,23 +4,23 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/alipourhabibi/log-broker/sender/configs"
+	"github.com/alipourhabibi/log-broker/reciever/configs"
 )
 
-type socket struct {
+type clientSocket struct {
 	conn net.Conn
 }
 
-func NewSocket() (*socket, error) {
+func NewClientSocket() (*clientSocket, error) {
 	conn, err := net.Dial("tcp", configs.Confs.DestinationHost+":"+fmt.Sprintf("%d", configs.Confs.DestinationPort))
 	if err != nil {
 		return nil, err
 	}
-	return &socket{
+	return &clientSocket{
 		conn: conn,
 	}, nil
 }
 
-func (s *socket) Send(message string) {
-	s.conn.Write([]byte(message + "\n"))
+func (c *clientSocket) Send(message string) {
+	c.conn.Write([]byte(message))
 }
