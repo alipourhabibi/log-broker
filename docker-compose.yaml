@@ -1,0 +1,56 @@
+version: "3.4"
+  
+services:
+  redis:
+    hostname: redis
+    container_name: redis
+    image: redis:latest
+    environment:
+      REDIS_PASSWORD: redis
+    ports:
+      - "6379:6379"
+
+  destination:
+    hostname: destination
+    container_name: destination
+    image: destination:latest
+    build: destination/.
+    restart: on-failure
+    ports:
+      - "5052:5052"
+
+  broker:
+    hostname: broker
+    container_name: broker
+    image: broker:latest
+    build: broker/.
+    restart: on-failure
+    depends_on:
+      - "destination"
+      - "redis"
+    ports:
+      - "5051:5051"
+
+  reciever:
+    hostname: reciever
+    container_name: reciever
+    image: reciever:latest
+    build: reciever/.
+    restart: on-failure
+    depends_on:
+      - "broker"
+    ports:
+      - "5050:5050"
+
+  sender:
+    hostname: sender
+    container_name: sender
+    image: sender:latest
+    build: sender/.
+    restart: on-failure
+    depends_on:
+      - "reciever"
+
+networks:
+  mqueue:
+    driver: bridge

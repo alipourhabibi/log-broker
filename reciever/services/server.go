@@ -11,16 +11,21 @@ import (
 
 type serverSocket struct {
 	l      net.Listener
-	client clientSocket
+	client *clientSocket
 }
 
 func NewServerSocket() (*serverSocket, error) {
-	l, err := net.Listen("tcp", "localhost:"+fmt.Sprintf("%d", configs.Confs.Port))
+	l, err := net.Listen("tcp", ":"+fmt.Sprintf("%d", configs.Confs.Port))
+	if err != nil {
+		return nil, err
+	}
+	client, err := NewClientSocket()
 	if err != nil {
 		return nil, err
 	}
 	return &serverSocket{
-		l: l,
+		l:      l,
+		client: client,
 	}, nil
 }
 
@@ -43,6 +48,6 @@ func (s *serverSocket) handleConnection(conn net.Conn) {
 			conn.Close()
 			return
 		}
-		go s.client.Send(string(buffer[:len(buffer)-1]))
+		go s.client.Send(string(buffer))
 	}
 }

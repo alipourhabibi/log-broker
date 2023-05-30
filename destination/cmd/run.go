@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/alipourhabibi/log-broker/broker/configs"
-	"github.com/alipourhabibi/log-broker/broker/internal/core/services/queue"
+	"github.com/alipourhabibi/log-broker/destination/configs"
+	"github.com/alipourhabibi/log-broker/destination/services"
 	"github.com/spf13/cobra"
 )
 
@@ -31,14 +31,10 @@ var runCMD = &cobra.Command{
 }
 
 func runCmdE(cmd *cobra.Command, args []string) error {
-	server, err := queue.New(
-		queue.WithRedisClient(),
-		queue.WithServer(),
-		queue.WithZapper(),
-	)
+	s, err := services.NewServer()
 	if err != nil {
 		return err
 	}
-	server.Launch()
+	s.Launch()
 	return nil
 }

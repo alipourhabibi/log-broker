@@ -1,0 +1,9 @@
+Port: 5051
+DestinationHost: destination
+DestinationPort: 5052
+
+RMQ:
+  Host: "redis"
+  Port: "6379"
+  Password: ""
+  DBName: 0

@@ -10,10 +10,7 @@ import (
 var Confs = Config{}
 
 type Config struct {
-	Port            int    `mapstructure:"Port"`
-	DestinationHost string `mapstructure:"DestinationHost"`
-	DestinationPort int    `mapstructure:"DestinationPort"`
-	RMQ             RMQ    `mapstructure:"RMQ"`
+	Port int `mapstructure:"Port"`
 }
 
 func (g *Config) Load(path string) error {
