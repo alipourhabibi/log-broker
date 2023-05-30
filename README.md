@@ -8,3 +8,8 @@ A systemc consists of 3(4) parts to communicate with each other and send logs to
 
 ## Architecture
 ![architecture](https://github.com/alipourhabibi/log-broker/blob/master/log-broker.png?raw=true)
+
+## Run the project
+```sh
+$ docker compose up
+```
